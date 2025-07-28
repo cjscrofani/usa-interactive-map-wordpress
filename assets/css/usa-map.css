@@ -1,0 +1,608 @@
+/**
+ * USA Interactive Map Frontend Styles
+ * Version 2.0.0
+ * 
+ * This CSS uses CSS variables that are dynamically set by the plugin
+ * based on user settings. Default values are provided as fallbacks.
+ */
+
+/* CSS Variables - Set dynamically by plugin */
+:root {
+    --usa-map-state-default: #4c57a6;
+    --usa-map-state-hover: #af1b3c;
+    --usa-map-state-active: #ec2d51;
+    --usa-map-border: #ffffff;
+    --usa-map-background: #f1f2f9;
+    --usa-map-tooltip-bg: #ffffff;
+    --usa-map-tooltip-text: #333333;
+    --usa-map-count-badge-bg: #ec2d51;
+    --usa-map-count-badge-text: #ffffff;
+}
+
+/* Container Styles */
+.usa-map-container {
+    width: 100%;
+    margin: 20px auto;
+}
+
+.usa-map-wrapper {
+    position: relative;
+    width: 100%;
+    background-color: var(--usa-map-background);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* SVG Styles */
+.usa-map-svg-container {
+    position: relative;
+    width: 100%;
+    overflow: visible;
+}
+
+.usa-map-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* State Styles */
+.usa-map-svg path.state {
+    fill: var(--usa-map-state-default);
+    stroke: var(--usa-map-border);
+    stroke-width: 1.5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: all;
+}
+
+.usa-map-svg path.state:hover,
+.usa-map-svg path.state.hover {
+    fill: var(--usa-map-state-hover);
+    stroke-width: 2;
+    filter: brightness(1.1);
+}
+
+.usa-map-svg path.state.active {
+    fill: var(--usa-map-state-active);
+    stroke-width: 3;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+}
+
+/* Focus styles for accessibility */
+.usa-map-svg path.state:focus {
+    outline: 3px solid var(--usa-map-state-active);
+    outline-offset: 2px;
+}
+
+/* State labels (if shown) */
+.state-label {
+    pointer-events: none;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    fill: #333;
+    text-anchor: middle;
+}
+
+/* Small states enhancement */
+.usa-map-svg path#RI,
+.usa-map-svg path#CT,
+.usa-map-svg path#MA,
+.usa-map-svg path#VT,
+.usa-map-svg path#NH,
+.usa-map-svg path#NJ,
+.usa-map-svg path#DE,
+.usa-map-svg path#MD,
+.usa-map-svg path#DC,
+.usa-map-svg path#HI {
+    stroke-width: 2;
+}
+
+/* Count Badges */
+.count-badges {
+    pointer-events: none;
+}
+
+.count-badge .badge-bg {
+    fill: var(--usa-map-count-badge-bg);
+    stroke: var(--usa-map-border);
+    stroke-width: 2;
+}
+
+.count-badge .badge-text {
+    fill: var(--usa-map-count-badge-text);
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: central;
+}
+
+/* =================================
+   Display Modes
+   ================================= */
+
+/* Tooltip Mode */
+.state-tooltip {
+    position: absolute;
+    background-color: var(--usa-map-tooltip-bg);
+    color: var(--usa-map-tooltip-text);
+    border: 2px solid var(--usa-map-state-default);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    min-width: 300px;
+    max-width: 450px;
+    max-height: 500px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+}
+
+.tooltip-header {
+    background-color: var(--usa-map-state-default);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.state-name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.close-tooltip,
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.close-tooltip:hover,
+.close-modal:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.tooltip-content {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Sidebar Mode */
+.map-sidebar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 350px;
+    height: 100%;
+    background-color: var(--usa-map-tooltip-bg);
+    border-left: 2px solid var(--usa-map-state-default);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    background-color: var(--usa-map-state-default);
+    color: white;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.sidebar-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.sidebar-content {
+    padding: 20px;
+}
+
+.sidebar-instruction {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 40px 20px;
+}
+
+/* Modal Mode */
+.usa-map-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: none;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--usa-map-tooltip-bg);
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    background-color: var(--usa-map-state-default);
+    color: white;
+    padding: 20px 25px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 25px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Below Map Mode */
+.map-results-below {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--usa-map-tooltip-bg);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.results-header {
+    border-bottom: 2px solid var(--usa-map-state-default);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.results-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--usa-map-state-default);
+}
+
+.results-content {
+    min-height: 200px;
+}
+
+/* =================================
+   Content Styles
+   ================================= */
+
+/* Loading Spinner */
+.loading-spinner {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.loading-spinner::before {
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f0f0f0;
+    border-top-color: var(--usa-map-state-default);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Posts Container */
+.posts-container,
+.state-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Results Header */
+.results-header {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Search Box */
+.results-search {
+    margin-bottom: 20px;
+}
+
+.search-results {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-results:focus {
+    outline: none;
+    border-color: var(--usa-map-state-default);
+    box-shadow: 0 0 0 2px rgba(76, 87, 166, 0.1);
+}
+
+/* Post Item */
+.state-post-item {
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 15px;
+}
+
+.state-post-item:hover {
+    border-color: var(--usa-map-state-default);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Post Thumbnail */
+.post-thumbnail {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #e0e0e0;
+}
+
+.post-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Post Content */
+.post-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.post-title {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.post-title a {
+    color: var(--usa-map-state-default);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.post-title a:hover {
+    color: var(--usa-map-state-hover);
+}
+
+.post-excerpt {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+/* Custom Fields */
+.post-custom-fields {
+    margin: 10px 0;
+    font-size: 0.85rem;
+}
+
+.custom-field {
+    margin-bottom: 5px;
+}
+
+.field-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.field-value {
+    color: #333;
+}
+
+.field-value a {
+    color: var(--usa-map-state-default);
+}
+
+/* Post Actions */
+.post-actions {
+    margin-top: 10px;
+}
+
+.read-more {
+    display: inline-block;
+    padding: 6px 16px;
+    background-color: var(--usa-map-state-default);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.read-more:hover {
+    background-color: var(--usa-map-state-hover);
+}
+
+/* No Results */
+.no-results,
+.error-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-style: italic;
+}
+
+.error-message {
+    color: #d32f2f;
+}
+
+/* =================================
+   Responsive Design
+   ================================= */
+
+@media (max-width: 1024px) {
+    .map-sidebar {
+        width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .usa-map-wrapper {
+        padding: 15px;
+    }
+    
+    .state-tooltip {
+        min-width: 280px;
+        max-width: 90vw;
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+    
+    .map-sidebar {
+        position: fixed;
+        width: 100%;
+        height: 50vh;
+        bottom: 0;
+        top: auto;
+        right: auto;
+        left: 0;
+        border-left: none;
+        border-top: 2px solid var(--usa-map-state-default);
+    }
+    
+    .modal-content {
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .state-post-item {
+        flex-direction: column;
+    }
+    
+    .post-thumbnail {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .state-name,
+    .sidebar-title,
+    .results-title {
+        font-size: 1.1rem;
+    }
+    
+    .post-title {
+        font-size: 1rem;
+    }
+    
+    .state-tooltip {
+        min-width: 95vw;
+    }
+}
+
+/* =================================
+   Print Styles
+   ================================= */
+
+@media print {
+    .state-tooltip,
+    .usa-map-modal,
+    .close-tooltip,
+    .close-modal,
+    .search-results {
+        display: none !important;
+    }
+    
+    .usa-map-wrapper {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .usa-map-svg path.state {
+        fill: #f0f0f0 !important;
+        stroke: #333 !important;
+    }
+}
+
+/* =================================
+   Accessibility
+   ================================= */
+
+/* Screen reader only content */
+.screen-reader-text {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .usa-map-svg path.state {
+        stroke-width: 2;
+        stroke: #000;
+    }
+    
+    .state-tooltip,
+    .modal-content {
+        border-width: 3px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
